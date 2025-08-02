@@ -1,112 +1,53 @@
-# Mythril
+<h1 align="center">
+  <img src="/static/mythril_new.png" height="250px" alt="Mythril Logo"/>
+</h1>
+
+<h2 align="center">🔎 Mythril</h2>
 
 <p align="center">
-	<img src="/static/mythril_new.png" height="320px"/>
+  <em>Powerful symbolic execution and security analysis tool for EVM bytecode</em>
 </p>
 
-[![Discord](https://img.shields.io/discord/697535391594446898)](https://discord.com/invite/consensys)
-[![PyPI](https://badge.fury.io/py/mythril.svg)](https://pypi.python.org/pypi/mythril)
-[![Read the Docs](https://readthedocs.org/projects/mythril-classic/badge/?version=master)](https://mythril-classic.readthedocs.io/en/develop/)
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Consensys/mythril/tree/develop.svg?style=shield&circle-token=fd6738fd235f6c2d8e10234259090e3b05190d0e)](https://dl.circleci.com/status-badge/redirect/gh/Consensys/mythril/tree/develop)
-[![Sonarcloud - Maintainability](https://sonarcloud.io/api/project_badges/measure?project=mythril&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=mythril)
-[![Pypi Installs](https://static.pepy.tech/badge/mythril)](https://pepy.tech/project/mythril)
-[![DockerHub Pulls](https://img.shields.io/docker/pulls/mythril/myth.svg)](https://cloud.docker.com/u/mythril/repository/docker/mythril/myth)
+<p align="center">
+  <a href="https://discord.com/invite/consensys">
+    <img alt="Discord" src="https://img.shields.io/discord/697535391594446898?color=5865F2&logo=discord&logoColor=white"/>
+  </a>
+  <a href="https://pypi.python.org/pypi/mythril">
+    <img alt="PyPI" src="https://badge.fury.io/py/mythril.svg"/>
+  </a>
+  <a href="https://mythril-classic.readthedocs.io/en/develop/">
+    <img alt="Read the Docs" src="https://readthedocs.org/projects/mythril-classic/badge/?version=master"/>
+  </a>
+  <a href="https://dl.circleci.com/status-badge/redirect/gh/Consensys/mythril/tree/develop">
+    <img alt="CircleCI" src="https://dl.circleci.com/status-badge/img/gh/Consensys/mythril/tree/develop.svg?style=shield"/>
+  </a>
+  <a href="https://sonarcloud.io/dashboard?id=mythril">
+    <img alt="Maintainability" src="https://sonarcloud.io/api/project_badges/measure?project=mythril&metric=sqale_rating"/>
+  </a>
+  <a href="https://pepy.tech/project/mythril">
+    <img alt="PyPI Downloads" src="https://static.pepy.tech/badge/mythril"/>
+  </a>
+  <a href="https://hub.docker.com/r/mythril/myth">
+    <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/mythril/myth.svg"/>
+  </a>
+</p>
 
-Mythril is a symbolic-execution-based security analysis tool for EVM bytecode. It detects security vulnerabilities in smart contracts built for Ethereum and other EVM-compatible blockchains.
+---
 
-Whether you want to contribute, need support, or want to learn what we have cooking for the future, you can checkout diligence-mythx channel in [ConsenSys Discord server](https://discord.gg/consensys).
+## 🚀 Overview
 
-## Installation and setup
+**Mythril** is a **symbolic execution-based security analysis tool** for **EVM bytecode**.  
+It detects vulnerabilities in Ethereum smart contracts and other EVM-compatible blockchains.
 
-Get it with [Docker](https://www.docker.com):
+Whether you're contributing, learning, or using it for audits, Mythril is a battle-tested tool used across the ecosystem.
+
+Join the discussion in the [diligence-mythx channel](https://discord.com/channels/697535391594446898/712829485350649886) on the [ConsenSys Discord](https://discord.gg/consensys).
+
+---
+
+## 📦 Installation
+
+### 🐳 Docker
 
 ```bash
-$ docker pull mythril/myth
-```
-
-Install from Pypi (Python 3.7-3.10):
-
-```bash
-$ pip3 install mythril
-```
-
-Use it via pre-commit hook (replace `$GIT_TAG` with real tag):
-
-```YAML
-- repo: https://github.com/Consensys/mythril
-  rev: $GIT_TAG
-  hooks:
-    - id: mythril
-```
-
-Additionally, set `args: [disassemble]` or `args: [read-storage]` to use a different command than `analyze`.
-
-See the [docs](https://mythril-classic.readthedocs.io/en/master/installation.html) for more detailed instructions. 
-
-## Usage
-
-Run:
-
-```
-$ myth analyze <solidity-file>
-```
-
-Or:
-
-```
-$ myth analyze -a <contract-address>
-```
-
-Specify the maximum number of transactions to explore with `-t <number>`. You can also set a timeout with `--execution-timeout <seconds>`.
-
-Here is an example of running Mythril on the file `killbilly.sol` which is in the `solidity_examples` directory for `3` transactions:
-
-```
-> myth a killbilly.sol -t 3
-==== Unprotected Selfdestruct ====
-SWC ID: 106
-Severity: High
-Contract: KillBilly
-Function name: commencekilling()
-PC address: 354
-Estimated Gas Usage: 974 - 1399
-Any sender can cause the contract to self-destruct.
-Any sender can trigger execution of the SELFDESTRUCT instruction to destroy this contract account and withdraw its balance to an arbitrary address. Review the transaction trace generated for this issue and make sure that appropriate security controls are in place to prevent unrestricted access.
---------------------
-In file: killbilly.sol:22
-
-selfdestruct(msg.sender)
-
---------------------
-Initial State:
-
-Account: [CREATOR], balance: 0x2, nonce:0, storage:{}
-Account: [ATTACKER], balance: 0x1001, nonce:0, storage:{}
-
-Transaction Sequence:
-
-Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
-Caller: [ATTACKER], function: killerize(address), txdata: 0x9fa299cc000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef, decoded_data: ('0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef',), value: 0x0
-Caller: [ATTACKER], function: activatekillability(), txdata: 0x84057065, value: 0x0
-Caller: [ATTACKER], function: commencekilling(), txdata: 0x7c11da20, value: 0x0
-
-```
-
-
-Instructions for using Mythril are found on the [docs](https://mythril-classic.readthedocs.io/en/develop/). 
-
-For support or general discussions please checkout [diligence-mythx channel](https://discord.com/channels/697535391594446898/712829485350649886) in [ConsenSys Discord server](https://discord.gg/consensys)..
-
-## Building the Documentation
-Mythril's documentation is contained in the `docs` folder and is published to [Read the Docs](https://mythril-classic.readthedocs.io/en/develop/). It is based on Sphinx and can be built using the Makefile contained in the subdirectory:
-
-```
-cd docs
-make html
-```
-
-This will create a `build` output directory containing the HTML output. Alternatively, PDF documentation can be built with `make latexpdf`. The available output format options can be seen with `make help`.
-
-## Vulnerability Remediation
-
-Visit the [Smart Contract Vulnerability Classification Registry](https://swcregistry.io/) to find detailed information and remediation guidance for the vulnerabilities reported.
+docker pull mythril/myth
